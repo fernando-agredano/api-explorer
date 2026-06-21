@@ -20,6 +20,7 @@ export default function App() {
   const [showSettings, setShowSettings] = useState(false)
   const [rawBody, setRawBody]      = useState('{}')
   const [copied, setCopied]        = useState(false)
+  const [copiedUrl, setCopiedUrl]  = useState(null)
   const [urls, setUrls]            = useState({
     p1: 'https://python-fastapi-tasks.onrender.com',
     p2: 'https://python-flask-hexagonal.onrender.com',
@@ -167,12 +168,20 @@ export default function App() {
                   <div style={{ width: 7, height: 7, borderRadius: '50%', background: p.color }} />
                   {p.name} — URL Render
                 </label>
-                <input
-                  value={urls[p.id]}
-                  onChange={e => setUrls(u => ({ ...u, [p.id]: e.target.value }))}
-                  placeholder="https://tu-proyecto.onrender.com"
-                  style={{ width: '100%', padding: '7px 10px', borderRadius: 'var(--radius)', border: '0.5px solid var(--brd)', background: 'var(--inp)', color: 'var(--tx)', fontSize: 11, fontFamily: 'var(--mono)' }}
-                />
+                <div style={{ display: 'flex', gap: 6 }}>
+                  <input
+                    readOnly
+                    value={urls[p.id]}
+                    style={{ flex: 1, padding: '7px 10px', borderRadius: 'var(--radius)', border: '0.5px solid var(--brd)', background: 'var(--inp)', color: 'var(--tx2)', fontSize: 11, fontFamily: 'var(--mono)', cursor: 'default' }}
+                  />
+                  <button
+                    onClick={() => { navigator.clipboard.writeText(urls[p.id]); setCopiedUrl(p.id); setTimeout(() => setCopiedUrl(null), 1800) }}
+                    title="Copiar URL"
+                    style={{ padding: '0 10px', borderRadius: 'var(--radius)', border: '0.5px solid var(--brd)', background: 'var(--inp)', color: copiedUrl === p.id ? 'var(--grn)' : 'var(--tx3)', cursor: 'pointer', display: 'flex', alignItems: 'center', flexShrink: 0 }}
+                  >
+                    <i className={`ti ${copiedUrl === p.id ? 'ti-check' : 'ti-copy'}`} style={{ fontSize: 13 }} aria-hidden="true" />
+                  </button>
+                </div>
               </div>
             ))}
           </div>
